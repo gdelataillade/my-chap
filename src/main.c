@@ -5,23 +5,39 @@
 ** main
 */
 
+#include <getopt.h>
 #include "chap.h"
 
-struct client_s init_struct(void)
-{
-    struct client_s client;
+const struct option long_options[] = {
+    {"target", required_argument, NULL, 't'},
+    {"port", required_argument, NULL, 'p'},
+    {"password", required_argument, NULL, 'P'},
+    {0, 0, 0, 0}
+};
 
-    client.password = NULL;
-    client.port = -1;
-    client.target = NULL;
-    return client;
+struct flags_s init_flags(void)
+{
+    struct flags_s flags;
+
+    flags.password = NULL;
+    flags.port = -1;
+    flags.target = NULL;
+    return flags;
 }
 
-int main(int argc, char *argv[])
+char *convert_target(char *optarg)
 {
-    int option_index = 0;
+    struct hostent *target = gethostbyname(optarg);
+
+    if (!target)
+        error("gethostbyname failed");
+    return (inet_ntoa(*((struct in_addr*) target->h_addr_list[0])));
+}
+
+void get_flags(int argc, char *argv[], struct flags_s *flags)
+{
     int opt;
-    struct client_s client = init_struct();
+    int option_index = 0;
 
     while (1) {
         opt = getopt_long(argc, argv, "t:p:P:", long_options, &option_index);
@@ -29,21 +45,26 @@ int main(int argc, char *argv[])
             break;
         switch(opt) {
             case 't':
-                client.target = optarg;
+                flags->target = convert_target(optarg);
                 break;
             case 'p':
-                client.port = atoi(optarg);
+                flags->port = atoi(optarg);
                 break;
             case 'P':
-                client.password = optarg;
+                flags->password = optarg;
                 break;
             default:
                 puts("Wrong args\n");
                 exit(1);
         }
     }
-    printf("target: %s\n", client.target);
-    printf("port: %d\n", client.port);
-    printf("password: %s\n", client.password);
-    return 0;
+}
+
+int main(int argc, char *argv[])
+{
+    struct flags_s flags = init_flags();
+
+    get_flags(argc, argv, &flags);
+    start_client(&flags);
+    return (EXIT_SUCCESS);
 }

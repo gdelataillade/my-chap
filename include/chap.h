@@ -8,27 +8,34 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <getopt.h>
 #include <stdio.h>
+#include <netdb.h>
+#include <errno.h>
 
-// Structures:
-struct option long_options[] = {
-    {"target", required_argument, NULL, 't'},
-    {"port", required_argument, NULL, 'p'},
-    {"password", required_argument, NULL, 'P'},
-    {0, 0, 0, 0}
-};
-
-struct client_s
+struct flags_s
 {
     char *target;
     int port;
     char *password;
 };
 
-// Prototypes:
+struct client_s
+{
+    struct flags_s flags;
+    struct sockaddr_in my_addr;
+    int sockfd;
+};
+
+// server.c
+void start_client(struct flags_s *flags);
+
+// error.c
+void error(char *str);
 
 #endif

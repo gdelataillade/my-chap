@@ -5,7 +5,9 @@
 ## Standard Makefile configuration
 ##
 
-SRC =	src/main.c
+SRC =	src/main.c		\
+		src/server.c	\
+		src/error.c
 
 OBJ =	$(SRC:.c=.o)
 
@@ -15,7 +17,7 @@ GCC =	gcc
 
 RM =	rm -f
 
-CFLAGS =	-Wall -Wextra -I./include/
+CFLAGS =	-Wall -Wextra -I./include/ -g
 
 all:	$(NAME)
 

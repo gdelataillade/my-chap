@@ -1,1 +1,5 @@
 .vscode
+mychap_server
+*.o
+client
+server

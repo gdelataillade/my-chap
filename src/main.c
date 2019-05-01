@@ -30,7 +30,7 @@ char *convert_target(char *optarg)
     struct hostent *target = gethostbyname(optarg);
 
     if (!target)
-        error("gethostbyname failed");
+        error("gethostbyname");
     return (inet_ntoa(*((struct in_addr*) target->h_addr_list[0])));
 }
 

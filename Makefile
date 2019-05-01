@@ -9,7 +9,8 @@ SRC =	src/main.c		\
 		src/client.c	\
 		src/error.c		\
 		src/send.c		\
-		src/receive.c
+		src/receive.c	\
+		src/fill_header.c
 
 OBJ =	$(SRC:.c=.o)
 

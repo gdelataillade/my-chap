@@ -9,6 +9,6 @@
 
 void error(char *str)
 {
-    printf("Error: %s.\nExit failure.\n", str);
-    _exit(0);
+    printf("Exit failure: %s failed.\n", str);
+    _exit(84);
 }

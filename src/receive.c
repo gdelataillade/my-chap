@@ -10,5 +10,5 @@
 
 void receive(struct client_s *client)
 {
-    
+    (void)client;
 }

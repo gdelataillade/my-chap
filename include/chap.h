@@ -32,10 +32,16 @@ struct client_s
     int sockfd;
 };
 
-// server.c
+// client.c
 void start_client(struct flags_s *flags);
 
 // error.c
 void error(char *str);
+
+// send.c
+void send(struct client_s *client, char *msg);
+
+// receive.c
+void receive(struct client_s *client);
 
 #endif

@@ -6,8 +6,10 @@
 ##
 
 SRC =	src/main.c		\
-		src/server.c	\
-		src/error.c
+		src/client.c	\
+		src/error.c		\
+		src/send.c		\
+		src/receive.c
 
 OBJ =	$(SRC:.c=.o)
 

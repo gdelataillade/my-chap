@@ -9,13 +9,25 @@
 
 void receive(struct client_s *client)
 {
-    char buff[1024];
+    struct packet_s packet;
+    memset(&packet, 0, sizeof(struct packet_s));
     struct sockaddr_storage sender;
     socklen_t size = sizeof(sender);
-    size_t ret = recvfrom(client->sockfd, &buff, sizeof(buff), 0,
+    size_t ret = recvfrom(client->sockfd, &packet, sizeof(struct packet_s), 0,
         (struct sockaddr *)&sender, &size);
 
-    ret = recvfrom(client->sockfd, &buff, sizeof(buff), 0,
+    ret = recvfrom(client->sockfd, &packet, sizeof(struct packet_s), 0,
         (struct sockaddr *)&sender, &size);
-    printf("server: [%s] of size %ld\n", buff, ret);
+    if ((int)ret < 0)
+        error("recvfrom");
+    printf("recv: [%s]\n", packet.data);
+    if (!strcmp(packet.data, PROTOCOL_MISMATCH)) {
+        printf("%s\n", packet.data); // return KO ?
+        _exit(0);
+    }
+    client->key = strdup(packet.data);
+    if (!packet.data)
+        error("hash key is null");
+    client->key = strcpy(client->key, packet.data);
+    printf("server: [%s]\n", packet.data);
 }

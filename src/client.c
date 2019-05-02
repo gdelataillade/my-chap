@@ -30,27 +30,38 @@ struct client_s init_client(struct flags_s flags, int sockfd)
 
 void phase_one(struct client_s *client)
 {
-    // send "client hello" to server
     send_msg(client, "client hello");
 }
 
 void phase_two(struct client_s *client)
 {
-    // receive challenge from server
     receive(client);
 }
 
 void phase_three(struct client_s *client)
 {
-    (void)client;
-    // encrypt and send answer to server
+    char *str = strcat(client->key, client->flags.password);
+    char *outputBuffer = malloc(sizeof(char) * (SHA256_DIGEST_LENGTH * 2));
+    unsigned char hash[SHA256_DIGEST_LENGTH] = {0};
+    SHA256_CTX sha256;
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, str, strlen(str));
+    SHA256_Final(hash, &sha256);
+    int i = 0;
+    
+    while (i < SHA256_DIGEST_LENGTH) {
+        sprintf(outputBuffer + (i * 2), "%02x", hash[i]);
+        i += 1;
+    }
+    client->key = outputBuffer;
+    send_msg(client, client->key);
 }
 
 void phase_four(struct client_s *client)
 {
-    (void)client;
     // receive answer from server that indicates if authentification was
     // successfull or not
+    receive(client);
 }
 
 void start_client(struct flags_s *flags)
@@ -68,7 +79,7 @@ void start_client(struct flags_s *flags)
         error("setsockopt");
     phase_one(&client);
     phase_two(&client);
-    // phase_three(&client);
-    // phase_four(&client);
-    // print_client_info(&client);
+    printf("hash key: [%s]\n", client.key);
+    phase_three(&client);
+    phase_four(&client);
 }

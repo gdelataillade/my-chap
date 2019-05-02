@@ -5,11 +5,11 @@
 ## Standard Makefile configuration
 ##
 
-SRC =	src/main.c		\
-		src/client.c	\
-		src/error.c		\
-		src/send.c		\
-		src/receive.c	\
+SRC =	src/main.c			\
+		src/client.c		\
+		src/error.c			\
+		src/send.c			\
+		src/receive.c		\
 		src/fill_header.c
 
 OBJ =	$(SRC:.c=.o)
@@ -20,7 +20,7 @@ GCC =	gcc
 
 RM =	rm -f
 
-CFLAGS =	-Wall -Wextra -I./include/ -g
+CFLAGS =	-Wall -Wextra -I./include/ -g -lcrypto
 
 all:	$(NAME)
 

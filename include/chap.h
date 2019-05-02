@@ -13,6 +13,7 @@
 #include <sys/socket.h>
 #include <netinet/ip.h>
 #include <netinet/udp.h>
+#include <openssl/sha.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -21,7 +22,8 @@
 #include <errno.h>
 #include <string.h>
 
-#define PACKET_SIZE 1024
+#define PACKET_SIZE         1024
+#define PROTOCOL_MISMATCH   "Protocol Mismatch"
 
 struct flags_s
 {
@@ -35,6 +37,7 @@ struct client_s
     struct flags_s flags;
     struct sockaddr_in my_addr;
     int sockfd;
+    char *key;
 };
 
 struct packet_s

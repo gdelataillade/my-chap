@@ -67,8 +67,8 @@ void start_client(struct flags_s *flags)
     if (setsockopt(client.sockfd, IPPROTO_IP, IP_HDRINCL, &opt, sizeof(int)) < 0)
         error("setsockopt");
     phase_one(&client);
-    // phase_two(&client);
+    phase_two(&client);
     // phase_three(&client);
     // phase_four(&client);
-    print_client_info(&client);
+    // print_client_info(&client);
 }

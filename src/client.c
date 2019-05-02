@@ -71,4 +71,4 @@ void start_client(struct flags_s *flags)
     // phase_three(&client);
     // phase_four(&client);
     print_client_info(&client);
-}   
+}

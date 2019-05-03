@@ -62,6 +62,8 @@ void get_flags(int argc, char *argv[], struct flags_s *flags)
 
 int main(int argc, char *argv[])
 {
+    if (argc < 7)
+        return (EXIT_FAILURE);
     struct flags_s flags = init_flags();
 
     get_flags(argc, argv, &flags);

@@ -40,21 +40,25 @@ void phase_two(struct client_s *client)
 
 void phase_three(struct client_s *client)
 {
-    char *str = strcat(client->key, client->flags.password);
-    char *outputBuffer = malloc(sizeof(char) * (SHA256_DIGEST_LENGTH * 2));
     unsigned char hash[SHA256_DIGEST_LENGTH] = {0};
     SHA256_CTX sha256;
+    char *output_buffer = {0};
+    char tmp[256];
+
+    printf("password: %s\n", client->flags.password);
+    strcpy(tmp, client->key);
+    strcat(tmp, client->flags.password);
+    output_buffer = calloc(1, sizeof(char) * ((SHA256_DIGEST_LENGTH * 2) + 1));
+    if (!output_buffer)
+        error("phase three - calloc");
     SHA256_Init(&sha256);
-    SHA256_Update(&sha256, str, strlen(str));
+    SHA256_Update(&sha256, tmp, strlen(tmp));
     SHA256_Final(hash, &sha256);
-    int i = 0;
-    
-    while (i < SHA256_DIGEST_LENGTH) {
-        sprintf(outputBuffer + (i * 2), "%02x", hash[i]);
-        i += 1;
-    }
-    client->key = outputBuffer;
-    send_msg(client, client->key);
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; ++i)
+        sprintf(output_buffer + (i * 2), "%02x", hash[i]);
+    output_buffer[64] = 0;
+    send_msg(client, output_buffer);
+    free(output_buffer);
 }
 
 void phase_four(struct client_s *client)
@@ -79,7 +83,6 @@ void start_client(struct flags_s *flags)
         error("setsockopt");
     phase_one(&client);
     phase_two(&client);
-    printf("hash key: [%s]\n", client.key);
     phase_three(&client);
     phase_four(&client);
 }

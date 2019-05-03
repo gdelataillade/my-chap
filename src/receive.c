@@ -16,11 +16,12 @@ void receive(struct client_s *client)
     size_t ret = recvfrom(client->sockfd, &packet, sizeof(struct packet_s), 0,
         (struct sockaddr *)&sender, &size);
 
+    memset(packet.data, 0, 1024);
     ret = recvfrom(client->sockfd, &packet, sizeof(struct packet_s), 0,
         (struct sockaddr *)&sender, &size);
     if ((int)ret < 0)
         error("recvfrom");
-    printf("recv: [%s]\n", packet.data);
+    printf("server: [%s]\n", packet.data);
     if (!strcmp(packet.data, PROTOCOL_MISMATCH)) {
         printf("%s\n", packet.data); // return KO ?
         _exit(0);
@@ -29,5 +30,4 @@ void receive(struct client_s *client)
     if (!packet.data)
         error("hash key is null");
     client->key = strcpy(client->key, packet.data);
-    printf("server: [%s]\n", packet.data);
 }

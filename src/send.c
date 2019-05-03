@@ -21,5 +21,4 @@ void send_msg(struct client_s *client, char *msg)
         (struct sockaddr *)&client->my_addr, sizeof(client->my_addr)) < 0) {
             error("sendto");
     }
-    (void)msg;
 }

@@ -29,8 +29,10 @@ char *convert_target(char *optarg)
 {
     struct hostent *target = gethostbyname(optarg);
 
-    if (!target)
-        error("gethostbyname");
+    if (!target) {
+        printf("No such hostname: '%s'\n", optarg);
+        exit(EXIT_FAILURE);
+    }
     return (inet_ntoa(*((struct in_addr*) target->h_addr_list[0])));
 }
 
@@ -44,17 +46,13 @@ void get_flags(int argc, char *argv[], struct flags_s *flags)
         if (opt == -1)
             break;
         switch(opt) {
-            case 't':
-                flags->target = convert_target(optarg);
+            case 't': flags->target = convert_target(optarg);
                 break;
-            case 'p':
-                flags->port = atoi(optarg);
+            case 'p': flags->port = atoi(optarg);
                 break;
-            case 'P':
-                flags->password = optarg;
+            case 'P': flags->password = optarg;
                 break;
-            default:
-                puts("Wrong args\n");
+            default: puts("Wrong args\n");
                 exit(1);
         }
     }

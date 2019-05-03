@@ -7,6 +7,8 @@
 
 #include "chap.h"
 
+char *strdup(const char *s);
+
 void receive(struct client_s *client)
 {
     struct packet_s packet;
@@ -21,7 +23,6 @@ void receive(struct client_s *client)
         (struct sockaddr *)&sender, &size);
     if ((int)ret < 0)
         error("recvfrom");
-    printf("server: [%s]\n", packet.data);
     if (!strcmp(packet.data, PROTOCOL_MISMATCH)) {
         printf("%s\n", packet.data); // return KO ?
         _exit(0);

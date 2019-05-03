@@ -47,19 +47,10 @@ struct packet_s
     char data[PACKET_SIZE];
 };
 
-// client.c
 void start_client(struct flags_s *flags);
-
-// error.c
 void error(char *str);
-
-// send.c
 void send_msg(struct client_s *client, char *msg);
-
-// receive.c
 void receive(struct client_s *client);
-
-// fill_header.c
 void init_packet(struct packet_s *packet,
     const char *target, int port, size_t length);
 

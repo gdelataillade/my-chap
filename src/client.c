@@ -45,7 +45,6 @@ void phase_three(struct client_s *client)
     char *output_buffer = {0};
     char tmp[256];
 
-    printf("password: %s\n", client->flags.password);
     strcpy(tmp, client->key);
     strcat(tmp, client->flags.password);
     output_buffer = calloc(1, sizeof(char) * ((SHA256_DIGEST_LENGTH * 2) + 1));
@@ -63,9 +62,11 @@ void phase_three(struct client_s *client)
 
 void phase_four(struct client_s *client)
 {
-    // receive answer from server that indicates if authentification was
-    // successfull or not
     receive(client);
+    if (!strncmp(client->key, "KO", 2))
+        puts("KO");
+    else
+        printf("Secret: '%s'\n", client->key);
 }
 
 void start_client(struct flags_s *flags)

@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2017
-** 
+** Chap
 ** File description:
-** .h file for 
+** .h file for chap
 */
 
 #ifndef PROJECT_H

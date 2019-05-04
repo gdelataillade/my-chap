@@ -33,7 +33,7 @@ char *convert_target(char *optarg)
         printf("No such hostname: '%s'\n", optarg);
         exit(EXIT_FAILURE);
     }
-    return (inet_ntoa(*((struct in_addr*) target->h_addr_list[0])));
+    return (inet_ntoa(*((struct in_addr *)target->h_addr_list[0])));
 }
 
 void get_flags(int argc, char *argv[], struct flags_s *flags)

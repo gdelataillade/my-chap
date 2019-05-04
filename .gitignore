@@ -3,3 +3,4 @@ mychap_server
 *.o
 client
 server
+*.rb

@@ -24,7 +24,7 @@ void receive(struct client_s *client)
     if ((int)ret < 0)
         error("recvfrom");
     if (!strcmp(packet.data, PROTOCOL_MISMATCH)) {
-        printf("%s\n", packet.data); // return KO ?
+        printf("%s\n", packet.data);
         _exit(0);
     }
     client->key = strdup(packet.data);

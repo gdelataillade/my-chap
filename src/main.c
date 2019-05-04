@@ -52,8 +52,7 @@ void get_flags(int argc, char *argv[], struct flags_s *flags)
                 break;
             case 'P': flags->password = optarg;
                 break;
-            default: puts("Wrong args\n");
-                exit(1);
+            default: error("getopt_long");
         }
     }
 }

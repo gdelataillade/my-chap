@@ -9,14 +9,6 @@
 
 int inet_aton(const char *cp, struct in_addr *inp);
 
-void print_client_info(struct client_s *client)
-{
-    printf("target: %s\n", client->flags.target);
-    printf("port: %d\n", client->flags.port);
-    printf("password: %s\n", client->flags.password);
-    printf("sockfd: %d\n", client->sockfd);
-}
-
 struct client_s init_client(struct flags_s flags, int sockfd)
 {
     struct client_s client;
@@ -28,17 +20,7 @@ struct client_s init_client(struct flags_s flags, int sockfd)
     return client;
 }
 
-void phase_one(struct client_s *client)
-{
-    send_msg(client, "client hello");
-}
-
-void phase_two(struct client_s *client)
-{
-    receive(client);
-}
-
-void phase_three(struct client_s *client)
+void encrypt_password(struct client_s *client)
 {
     unsigned char hash[SHA256_DIGEST_LENGTH] = {0};
     SHA256_CTX sha256;
@@ -60,7 +42,7 @@ void phase_three(struct client_s *client)
     free(output_buffer);
 }
 
-void phase_four(struct client_s *client)
+void get_response(struct client_s *client)
 {
     receive(client);
     if (!strncmp(client->key, "KO", 2))
@@ -82,8 +64,8 @@ void start_client(struct flags_s *flags)
         error("inet_aton");
     if (setsockopt(client.sockfd, IPPROTO_IP, IP_HDRINCL, &opt, sizeof(int)) < 0)
         error("setsockopt");
-    phase_one(&client);
-    phase_two(&client);
-    phase_three(&client);
-    phase_four(&client);
+    send_msg(&client, "client hello");
+    receive(&client);
+    encrypt_password(&client);
+    get_response(&client);
 }

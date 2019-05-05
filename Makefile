@@ -20,7 +20,7 @@ GCC =	gcc
 
 RM =	rm -f
 
-CFLAGS =	-Wall -Wextra -I./include/ -g -lcrypto
+CFLAGS =	-Wall -Wextra -I./include/ -lcrypto
 
 all:	$(NAME)
 
